@@ -8,7 +8,7 @@ async def version():
     version = 1  # Valores Enteros
     subVersion = 0.5  # Valores de coma flotante
     habilitado = True  # Valores Booleanos (True / False)
-    lastUpdated = '2021-08-01'
+    lastUpdated = '2021-09-23'
 
     version = str(version) + '.' + str(subVersion)
 
