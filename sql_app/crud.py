@@ -5,6 +5,9 @@ from . import models, schemas
 from sqlalchemy.exc import SQLAlchemyError
 
 
+#==============================================================================================================
+#AMIGOS
+
 def get_Amigos_All(db: Session, offset: int = 0, limite: int = 100):
     return db.\
         query(models.Amigos).\
@@ -57,3 +60,66 @@ def borrar_Amigos(db: Session, id_Amigo: int):
     db.commit()
 
     return id_Amigo
+
+#==============================================================================================
+#CONTACTOS
+
+def get_Contactos_All(db: Session, offset: int = 0, limite: int = 100):
+    return db.\
+        query(models.Contactos).\
+        offset(offset).\
+        limit(limite).\
+        all()
+
+def get_Contacto(db: Session, Contacto_id: int):
+    return db.\
+        query(models.Contactos).\
+        filter(models.Contactos.Id == Contacto_id).\
+        first()
+
+def crear_Contacto(db: Session, nuevo_Contacto: schemas.contactos_Post):
+    try:
+        db_Contactos = models.Contactos(Usuario=nuevo_Contacto.usuario,
+                                    Nombres=nuevo_Contacto.nombres,
+                                    Apellidos=nuevo_Contacto.apellidos,
+                                    CorreoElectronico=nuevo_Contacto.correoelectronico,
+                                    Telefono=nuevo_Contacto.telefono,
+                                    Genero=nuevo_Contacto.genero,
+                                    FechaNacimiento=nuevo_Contacto.fechanacimiento,
+                                    Jwtoken=nuevo_Contacto.Jwtoken,
+                                    IntentosFallidos=nuevo_Contacto.IntentosFallidos,
+                                    FechaBloqueo=nuevo_Contacto.FechaBloqueo,
+                                    IdRol=nuevo_Contacto.IdRol)
+        db.add(db_Contactos)
+        db.commit()
+        db.refresh(db_Contactos)
+        return db_Contactos
+    except SQLAlchemyError as exc:
+        db.rollback()
+        raise Exception(message="Error creando el registro")
+
+
+def actualizar_Contactos(db: Session, Contacto_actualizado: schemas.contactos_Post, id: int):
+    viejo_Contacto = db.query(models.Contactos).filter(models.Contactos.Id == id)
+
+    if not viejo_Contacto.first():
+        raise SQLAlchemyError(message="Error encontrando el registro para actualizar")
+
+    print(Contacto_actualizado.dict())
+    viejo_Contacto.update(Contacto_actualizado.dict())
+    db.commit()
+
+    return viejo_Contacto.first()
+
+
+def borrar_Contactos(db: Session, id_Contacto: int):
+    Contacto = db.query(models.Contactos).filter(models.Contactos.Id == id_Contacto)
+
+    if not Contacto.first():
+        raise SQLAlchemyError(message= "Error encontrando el registro para borrar")
+
+    Contacto.delete(synchronize_session=False)
+    db.commit()
+
+    return id_Contacto
+
