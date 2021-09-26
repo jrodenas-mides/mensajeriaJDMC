@@ -19,7 +19,7 @@ def get_Amigos(db: Session, Amigos_id: int):
     return db.\
         query(models.Amigos).\
         filter(models.Amigos.Id == Amigos_id).\
-        first()
+        all()
 
 def crear_Amigos(db: Session, nuevo_Amigo: schemas.Amigos_Post):
     try:
@@ -75,7 +75,7 @@ def get_Contacto(db: Session, Contacto_id: int):
     return db.\
         query(models.Contactos).\
         filter(models.Contactos.id == Contacto_id).\
-        first()
+        all()
 
 def crear_Contacto(db: Session, nuevo_Contacto: schemas.contactos_Post):
     try:
@@ -138,7 +138,7 @@ def get_Mensajes(db: Session, Mensaje_id: int):
     return db.\
         query(models.Mensajes).\
         filter(models.Mensajes.Id == Mensaje_id).\
-        first()
+        all()
 
 def crear_Mensaje(db: Session, nuevo_Mensaje: schemas.mensajes_Post):
     try:
