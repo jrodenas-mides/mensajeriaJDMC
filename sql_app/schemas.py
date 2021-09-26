@@ -1,3 +1,5 @@
+from datetime import datetime, date
+
 from pydantic import BaseModel
 
 # POST
@@ -14,7 +16,7 @@ class Amigos_Post(BaseModel):
 
 
 # GET
-class Categoria_Get(Amigos_Post): # Categoria_Get hereda de Categoria_Post
+class Amigos_Get(Amigos_Post): # Categoria_Get hereda de Categoria_Post
     id: int
 
 # =====================================================================================================================
