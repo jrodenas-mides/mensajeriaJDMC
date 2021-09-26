@@ -74,7 +74,7 @@ def get_Contactos_All(db: Session, offset: int = 0, limite: int = 100):
 def get_Contacto(db: Session, Contacto_id: int):
     return db.\
         query(models.Contactos).\
-        filter(models.Contactos.Id == Contacto_id).\
+        filter(models.Contactos.id == Contacto_id).\
         first()
 
 def crear_Contacto(db: Session, nuevo_Contacto: schemas.contactos_Post):

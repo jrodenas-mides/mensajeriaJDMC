@@ -40,10 +40,10 @@ class contactos_Post(BaseModel):
     telefono: str
     genero: str
     fechanacimiento: date
-    Jwtoken: str
-    IntentosFallidos: int
-    FechaBloqueo: datetime
-    IdRol: int
+    jwtoken: str
+    intentosfallidos: int
+    fechabloqueo: datetime
+    idrol: int
     class Config:
         orm_mode = True
 
@@ -66,11 +66,11 @@ class estatus_Get(estatus_Post):
 
 
 class mensajes_Post(BaseModel):
-    Id_Emisor: int
-    Id_Receptor: int
-    Fecha_Envio: datetime
-    Id_Estatus: int
-    Mensaje: str
+    id_emisor: int
+    id_receptor: int
+    fecha_envio: datetime
+    id_estatus: int
+    mensaje: str
     class Config:
         orm_mode = True
 
@@ -81,7 +81,7 @@ class mensajes_Get(mensajes_Post):
 
 class roles_Post(BaseModel):
     nombre_rol: str
-    Id_Estatus: int
+    id_estatus: int
     class Config:
         orm_mode = True
 
