@@ -82,7 +82,7 @@ def crear_Contacto(db: Session, nuevo_contacto: schemas.contactos_Post):
         db_Contactos = models.Contactos(usuario=nuevo_contacto.usuario,
                                     nombres=nuevo_contacto.nombres,
                                     apellidos=nuevo_contacto.apellidos,
-                                    correoElectronico=nuevo_contacto.correoelectronico,
+                                    correoelectronico=nuevo_contacto.correoelectronico,
                                     telefono=nuevo_contacto.telefono,
                                     genero=nuevo_contacto.genero,
                                     fechanacimiento=nuevo_contacto.fechanacimiento,
@@ -113,7 +113,7 @@ def actualizar_Contactos(db: Session, contacto_actualizado: schemas.contactos_Po
 
 
 def borrar_Contactos(db: Session, id_contacto: int):
-    Contacto = db.query(models.Contactos).filter(models.Contactos.Id == id_contacto)
+    Contacto = db.query(models.Contactos).filter(models.Contactos.id == id_contacto)
 
     if not Contacto.first():
         raise SQLAlchemyError(message= "Error encontrando el registro para borrar")
