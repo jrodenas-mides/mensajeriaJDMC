@@ -34,7 +34,7 @@ def crear_Amigos(db: Session, nuevo_Amigo: schemas.Amigos_Post):
         raise Exception(message="Error creando el registro")
 
 
-def actualizar_Amigos(db: Session, Amigos_actualizado: schemas.Cliente_Post, id: int):
+def actualizar_Amigos(db: Session, Amigos_actualizado: schemas.Amigos_Post, id: int):
     viejo_Amigos = db.query(models.Amigos).filter(models.Amigos.Id == id)
 
     if not viejo_Amigos.first():
