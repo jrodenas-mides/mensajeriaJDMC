@@ -1,56 +1,87 @@
 from pydantic import BaseModel
 
 # POST
-class Categoria_Post(BaseModel):
-    nombre: str
+
+
+class Amigos_Post(BaseModel):
+    id_contacto1: int
+    id_contacto2: int
+    id_estatus: int
+    fecha_asociacion: datetime
+    llave_cifrada: str
     class Config:
         orm_mode = True
 
 
 # GET
-class Categoria_Get(Categoria_Post): # Categoria_Get hereda de Categoria_Post
+class Categoria_Get(Amigos_Post): # Categoria_Get hereda de Categoria_Post
     id: int
 
 # =====================================================================================================================
 
-class Editorial_Post(BaseModel):
-    nombre: str
-    pais: str
+class CategoriasEstatus_Post(BaseModel):
+    descripcion: str
     class Config:
         orm_mode = True
 
-class Editorial_Get(Editorial_Post):
+class CategoriasEstatus_Get(CategoriasEstatus_Post):
     id: int
 
 # ====================================================================================================================
 
-class Libro_Post(BaseModel):
-    nombre: str
-    id_autor: int
-    id_categoria: int
-    precio: float
-    edicion: str
-    id_editorial: int
-    anio_impresion: int
-
+class contactos_Post(BaseModel):
+    usuario: str
+    nombres: str
+    apellidos: str
+    correoelectronico: str
+    telefono: str
+    genero: str
+    fechanacimiento: date
+    Jwtoken: str
+    IntentosFallidos: int
+    FechaBloqueo: datetime
+    IdRol: int
     class Config:
         orm_mode = True
 
 
-class Libro_Get(Libro_Post):
+class contactos_Get(contactos_Post):
     id: int
 
 
 # ===============================================================================================
 
-class Cliente_Post(BaseModel):
-    nombre: str
-    apellidos: str
-    correo: str
-
+class estatus_Post(BaseModel):
+    id_categoria: int
+    descripcion: str
     class Config:
         orm_mode = True
 
 
-class Cliente_Get(Cliente_Post):
+class estatus_Get(estatus_Post):
+    id: int
+
+
+class mensajes_Post(BaseModel):
+    Id_Emisor: int
+    Id_Receptor: int
+    Fecha_Envio: datetime
+    Id_Estatus: int
+    Mensaje: str
+    class Config:
+        orm_mode = True
+
+
+class mensajes_Get(mensajes_Post):
+    id: int
+
+
+class roles_Post(BaseModel):
+    nombre_rol: str
+    Id_Estatus: int
+    class Config:
+        orm_mode = True
+
+
+class roles_Get(roles_Post):
     id: int
