@@ -248,6 +248,9 @@ INSERT INTO public.estatus(
 	id, id_categoria, descripcion)
 	VALUES (8, 3, 'Inactivo');
 
+	insert into roles(nombre_rol,id_estatus)
+    values('Basico','7'),('Pro','7')
+
 
 
 
