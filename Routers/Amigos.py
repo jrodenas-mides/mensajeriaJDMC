@@ -4,6 +4,6 @@ router = APIRouter()
 
 
 
-@router.get("/isalive")
+@router.get("/isalive", tags=["Amigos"])
 async def getIsAlive():
     return {'yes'}
