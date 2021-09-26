@@ -44,7 +44,7 @@ def actualizar_Amigos(db: Session, Amigos_actualizado: schemas.Amigos_Post, id: 
     viejo_Amigos.update(Amigos_actualizado.dict())
     db.commit()
 
-    return viejo_cliente.first()
+    return viejo_Amigos.first()
 
 
 def borrar_Amigos(db: Session, id_Amigo: int):
