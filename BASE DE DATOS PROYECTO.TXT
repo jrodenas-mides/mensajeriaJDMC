@@ -1,0 +1,257 @@
+-- Database: db_Mensajeria
+
+-- DROP DATABASE "db_Mensajeria";
+
+CREATE DATABASE "db_Mensajeria"
+    WITH 
+    OWNER = postgres
+    ENCODING = 'UTF8'
+    LC_COLLATE = 'Spanish_Guatemala.1252'
+    LC_CTYPE = 'Spanish_Guatemala.1252'
+    TABLESPACE = pg_default
+    CONNECTION LIMIT = -1;
+
+COMMENT ON DATABASE "db_Mensajeria"
+    IS 'Base de datos utilizada para servicio de mensajeria.';
+
+GRANT ALL ON DATABASE "db_Mensajeria" TO postgres WITH GRANT OPTION;
+
+GRANT TEMPORARY, CONNECT ON DATABASE "db_Mensajeria" TO PUBLIC;
+
+-- Role: con_app_mensajeria
+-- DROP ROLE con_app_mensajeria;
+
+CREATE ROLE con_app_mensajeria WITH
+  LOGIN
+  SUPERUSER
+  INHERIT
+  CREATEDB
+  CREATEROLE
+  REPLICATION;
+
+COMMENT ON ROLE con_app_mensajeria IS 'Usuario Mensajeria proyecto.';
+
+
+
+-- Table: public.CategoriaEstatus
+
+-- DROP TABLE public.CategoriaEstatus;
+
+CREATE TABLE IF NOT EXISTS public.CategoriasEstatus
+(
+    Id serial NOT NULL,    
+	Descripcion varchar(50) NOT NULL,
+	CONSTRAINT CategoriasEstatus_Id_pkey PRIMARY KEY (Id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public.CategoriasEstatus
+    OWNER to con_app_mensajeria;
+
+GRANT ALL ON TABLE public.CategoriasEstatus TO con_app_mensajeria;
+
+
+
+
+-- Table: public.Estatus
+
+-- DROP TABLE public.Estatus;
+
+CREATE TABLE IF NOT EXISTS public.Estatus
+(
+    Id serial NOT NULL,
+	Id_Categoria integer NOT NULL,
+	Descripcion varchar(50) NOT NULL,
+	CONSTRAINT Estatus_Id_pkey PRIMARY KEY (Id),
+	CONSTRAINT Estatus_IdCategoria_fkey FOREIGN KEY (Id_Categoria)
+		REFERENCES public.CategoriasEstatus (Id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public.Estatus
+    OWNER to con_app_mensajeria;
+
+GRANT ALL ON TABLE public.Estatus TO con_app_mensajeria;
+
+
+-- Table: public.Roles
+
+-- DROP TABLE public.Roles;
+
+CREATE TABLE IF NOT EXISTS public.Roles
+(
+    Id serial NOT NULL,    
+	Nombre_Rol varchar(50) NOT NULL,	
+	Id_Estatus integer NOT NULL,
+    CONSTRAINT Roles_Id_pkey PRIMARY KEY (Id)
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public.Roles
+    OWNER to con_app_mensajeria;
+
+GRANT ALL ON TABLE public.Roles TO con_app_mensajeria;
+
+
+
+-- Table: public.Contactos
+
+-- DROP TABLE public.Contactos;
+
+CREATE TABLE IF NOT EXISTS public.Contactos
+(
+	Id serial NOT NULL,
+    Usuario varchar(50) NOT NULL,    
+	Nombres varchar(250)  NOT NULL,
+    Apellidos varchar(250)  NOT NULL,
+    CorreoElectronico varchar(250)  NOT NULL,
+	Telefono varchar(8) NULL,
+	Genero varchar(50) NOT NULL,
+	FechaNacimiento date NOT NULL,
+	Jwtoken varchar(250) not null,
+	IntentosFallidos int not null,
+	FechaBloqueo timestamp null,
+	IdRol int not null,
+	CONSTRAINT Contactos_Id_pkey PRIMARY KEY (Id),	
+	CONSTRAINT Contactos_usuario_key UNIQUE (usuario),
+	CONSTRAINT Contactos_CorreoElectronico_key UNIQUE (CorreoElectronico),
+	CONSTRAINT usuario_Telefono_key UNIQUE (Telefono),
+	CONSTRAINT Contactos_IdRol_Roles_fkey FOREIGN KEY (IdRol)
+		REFERENCES public.Roles (Id) MATCH SIMPLE
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public.Contactos
+    OWNER to con_app_mensajeria;
+
+GRANT ALL ON TABLE public.Contactos TO con_app_mensajeria;
+
+
+
+-- Table: public.Amigos
+
+-- DROP TABLE public.Amigos;
+
+CREATE TABLE IF NOT EXISTS public.Amigos
+(   Id serial NOT NULL,
+    Id_Contacto1 integer NOT NULL,    
+	Id_Contacto2 integer NOT NULL,
+	Id_Estatus integer NOT NULL,
+    Fecha_Asociacion timestamp NOT NULL,
+	Llave_Cifrada varchar(300) NOT NULL,
+ CONSTRAINT Amigos_Id_pkey PRIMARY KEY (Id),
+	CONSTRAINT Amigos_Id_Contacto1_fkey FOREIGN KEY (Id_Contacto1)
+		REFERENCES public.Contactos (Id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+	CONSTRAINT Amigos_Id_Contacto2_fkey FOREIGN KEY (Id_Contacto2)
+		REFERENCES public.Contactos (Id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+	CONSTRAINT Amigos_Id_Estatus_fkey FOREIGN KEY (Id_Estatus)
+		REFERENCES public.Estatus (Id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+    
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public.Amigos
+    OWNER to con_app_mensajeria;
+
+GRANT ALL ON TABLE public.Amigos TO con_app_mensajeria;
+
+
+-- Table: public.Mensajes
+
+-- DROP TABLE public.Mensajes;
+
+CREATE TABLE IF NOT EXISTS public.Mensajes
+(   Id serial NOT NULL,
+    Id_Emisor integer NOT NULL,    
+	Id_Receptor integer NOT NULL,
+	Fecha_Envio timestamp NOT NULL,
+    Id_Estatus integer NOT NULL,
+	Mensaje varchar(500) NOT NULL,
+ CONSTRAINT Mensajes_Id_pkey PRIMARY KEY (Id),
+	CONSTRAINT Mensajes_Id_Emisor_fkey FOREIGN KEY (Id_Emisor)
+		REFERENCES public.Contactos (Id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+	CONSTRAINT Mensajes_Id_Receptor_fkey FOREIGN KEY (Id_Receptor)
+		REFERENCES public.Contactos (Id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+	CONSTRAINT Mensajes_Id_Estatus_fkey FOREIGN KEY (Id_Estatus)
+		REFERENCES public.Estatus (Id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+    
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public.Amigos
+    OWNER to con_app_mensajeria;
+
+GRANT ALL ON TABLE public.Amigos TO con_app_mensajeria;
+
+
+INSERT INTO public.categoriasestatus(
+	id, descripcion)
+	VALUES (1, 'Amigos');
+	
+INSERT INTO public.categoriasestatus(
+id, descripcion)
+VALUES (2, 'Mensajes');
+
+INSERT INTO public.categoriasestatus(
+	id, descripcion)
+	VALUES (3, 'Roles');
+
+INSERT INTO public.estatus(
+	id, id_categoria, descripcion)
+	VALUES (1, 1, 'Aceptado');
+	
+	INSERT INTO public.estatus(
+	id, id_categoria, descripcion)
+	VALUES (2, 1, 'Denegado');
+	
+	INSERT INTO public.estatus(
+	id, id_categoria, descripcion)
+	VALUES (3, 1, 'Cancelado');
+	
+	INSERT INTO public.estatus(
+	id, id_categoria, descripcion)
+	VALUES (4, 1, 'Pendiente');
+	
+	INSERT INTO public.estatus(
+	id, id_categoria, descripcion)
+	VALUES (5, 2, 'Enviado');
+	
+	INSERT INTO public.estatus(
+	id, id_categoria, descripcion)
+	VALUES (6, 2, 'Leido');
+	
+	INSERT INTO public.estatus(
+	id, id_categoria, descripcion)
+	VALUES (7, 3, 'Activo');
+	
+	INSERT INTO public.estatus(
+	id, id_categoria, descripcion)
+	VALUES (8, 3, 'Inactivo');
+
+
+
+
+
+
+
+
