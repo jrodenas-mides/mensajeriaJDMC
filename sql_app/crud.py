@@ -1,6 +1,7 @@
 # CRUD: CREATE, READ, UPDATE, DELETE
 
 from sqlalchemy.orm import Session
+
 from . import models, schemas
 from sqlalchemy.exc import SQLAlchemyError
 
@@ -75,21 +76,22 @@ def get_Contacto(db: Session, Contacto_id: int):
     return db.\
         query(models.Contactos).\
         filter(models.Contactos.id == Contacto_id).\
-        first()
+       all()
 
-def crear_Contacto(db: Session, nuevo_Contacto: schemas.contactos_Post):
+
+def crear_Contacto(db: Session, nuevo_contacto: schemas.contactos_Post):
     try:
-        db_Contactos = models.Contactos(Usuario=nuevo_Contacto.usuario,
-                                    Nombres=nuevo_Contacto.nombres,
-                                    Apellidos=nuevo_Contacto.apellidos,
-                                    CorreoElectronico=nuevo_Contacto.correoelectronico,
-                                    Telefono=nuevo_Contacto.telefono,
-                                    Genero=nuevo_Contacto.genero,
-                                    FechaNacimiento=nuevo_Contacto.fechanacimiento,
-                                    Jwtoken=nuevo_Contacto.Jwtoken,
-                                    IntentosFallidos=nuevo_Contacto.IntentosFallidos,
-                                    FechaBloqueo=nuevo_Contacto.FechaBloqueo,
-                                    IdRol=nuevo_Contacto.IdRol)
+        db_Contactos = models.Contactos(usuario=nuevo_contacto.usuario,
+                                    nombres=nuevo_contacto.nombres,
+                                    apellidos=nuevo_contacto.apellidos,
+                                    correoelectronico=nuevo_contacto.correoelectronico,
+                                    telefono=nuevo_contacto.telefono,
+                                    genero=nuevo_contacto.genero,
+                                    fechanacimiento=nuevo_contacto.fechanacimiento,
+                                    jwtoken=nuevo_contacto.jwtoken,
+                                    intentosfallidos=nuevo_contacto.intentosfallidos,
+                                    fechabloqueo=nuevo_contacto.fechabloqueo,
+                                    idrol=nuevo_contacto.idrol)
         db.add(db_Contactos)
         db.commit()
         db.refresh(db_Contactos)
@@ -99,21 +101,21 @@ def crear_Contacto(db: Session, nuevo_Contacto: schemas.contactos_Post):
         raise Exception(message="Error creando el registro")
 
 
-def actualizar_Contactos(db: Session, Contacto_actualizado: schemas.contactos_Post, id: int):
-    viejo_Contacto = db.query(models.Contactos).filter(models.Contactos.Id == id)
+def actualizar_Contactos(db: Session, contacto_actualizado: schemas.contactos_Post, id_contacto: int):
+    viejo_Contacto = db.query(models.Contactos).filter(models.Contactos.id == id_contacto)
 
     if not viejo_Contacto.first():
         raise SQLAlchemyError(message="Error encontrando el registro para actualizar")
 
-    print(Contacto_actualizado.dict())
-    viejo_Contacto.update(Contacto_actualizado.dict())
+
+    viejo_Contacto.update(contacto_actualizado.dict())
     db.commit()
 
     return viejo_Contacto.first()
 
 
-def borrar_Contactos(db: Session, id_Contacto: int):
-    Contacto = db.query(models.Contactos).filter(models.Contactos.Id == id_Contacto)
+def borrar_Contactos(db: Session, id_contacto: int):
+    Contacto = db.query(models.Contactos).filter(models.Contactos.id == id_contacto)
 
     if not Contacto.first():
         raise SQLAlchemyError(message= "Error encontrando el registro para borrar")
@@ -121,7 +123,7 @@ def borrar_Contactos(db: Session, id_Contacto: int):
     Contacto.delete(synchronize_session=False)
     db.commit()
 
-    return id_Contacto
+    return id_contacto
 
 
 #============================================================================================================
