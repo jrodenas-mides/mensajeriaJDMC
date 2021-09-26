@@ -123,3 +123,61 @@ def borrar_Contactos(db: Session, id_Contacto: int):
 
     return id_Contacto
 
+
+#============================================================================================================
+#MENSAJES
+
+def get_Mensajes_All(db: Session, offset: int = 0, limite: int = 100):
+    return db.\
+        query(models.Mensajes).\
+        offset(offset).\
+        limit(limite).\
+        all()
+
+def get_Mensajes(db: Session, Mensaje_id: int):
+    return db.\
+        query(models.Mensajes).\
+        filter(models.Mensajes.Id == Mensaje_id).\
+        first()
+
+def crear_Mensaje(db: Session, nuevo_Mensaje: schemas.mensajes_Post):
+    try:
+        db_Mensaje = models.Mensajes(Id_Emisor=nuevo_Mensaje.Id_Emisor,
+                                    Id_Receptor=nuevo_Mensaje.Id_Receptor,
+                                    Fecha_Envio=nuevo_Mensaje.Fecha_Envio,
+                                    Id_Estatus=nuevo_Mensaje.Id_Estatus,
+                                    Mensaje=nuevo_Mensaje.Mensaje)
+        db.add(db_Mensaje)
+        db.commit()
+        db.refresh(db_Mensaje)
+        return db_Mensaje
+    except SQLAlchemyError as exc:
+        db.rollback()
+        raise Exception(message="Error creando el registro")
+
+
+def actualizar_Mensajes(db: Session, Mensaje_actualizado: schemas.mensajes_Post, id: int):
+    viejo_Mensaje = db.query(models.Mensajes).filter(models.Mensajes.Id == id)
+
+    if not viejo_Mensaje.first():
+        raise SQLAlchemyError(message="Error encontrando el registro para actualizar")
+
+    print(Mensaje_actualizado.dict())
+    viejo_Mensaje.update(Mensaje_actualizado.dict())
+    db.commit()
+
+    return viejo_Mensaje.first()
+
+
+def borrar_Mensajes(db: Session, id_Mensaje: int):
+    Mensaje = db.query(models.Mensajes).filter(models.Mensajes.Id == id_Mensaje)
+
+    if not Mensaje.first():
+        raise SQLAlchemyError(message= "Error encontrando el registro para borrar")
+
+    Mensaje.delete(synchronize_session=False)
+    db.commit()
+
+    return id_Mensaje
+
+
