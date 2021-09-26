@@ -1,8 +1,6 @@
 from fastapi import APIRouter
 
-router = APIRouter()
-
-
+router = APIRouter(prefix="/auth")
 
 @router.get("/isalive", tags=["Amigos"])
 async def getIsAlive():
