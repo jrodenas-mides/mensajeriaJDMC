@@ -10,7 +10,7 @@ router = APIRouter(prefix="/auth")
 async def getIsAlive():
     return {'yes'}
 
-@router.get("/amigos/{id_amigo}", response_model = List[schemas.Amigos_Get], status_code=status.HTTP_200_OK )
+@router.get("/amigo/{id_amigo}", response_model = List[schemas.Amigos_Get], status_code=status.HTTP_200_OK )
 def get_amigos(id_amigo:int, db: Session = Depends(main.get_db)):
     try:
         amigo = crud.get_Amigos(db, id_amigo)
@@ -18,10 +18,34 @@ def get_amigos(id_amigo:int, db: Session = Depends(main.get_db)):
     except:
        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Amigos no encontrados")
 
-@router.get("/librosAll", response_model = List[schemas.Amigos_Get], status_code=status.HTTP_200_OK )
+@router.get("/amigoAll", response_model = List[schemas.Amigos_Get], status_code=status.HTTP_200_OK )
 def get_librosAll(offset: int = 0, limite: int = 100, db: Session = Depends(main.get_db)):
     try:
         libro = crud.get_Amigos_All(db, offset, limite)
         return libro
     except Exception as exc:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Amigos no encontrados")
+
+@router.post("/ammigo", status_code=status.HTTP_201_CREATED)
+async def crear_amigos(nuevo_amigo: schemas.Amigos_Post, db: Session = Depends(main.get_db)):
+    try:
+        result = crud.crear_Amigos(nuevo_cliente=nuevo_amigo, db=db)
+        return {"id": result.id, "status": "ok"}
+    except:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Amigo no agregado")
+
+@router.put("/amigo/{id}", status_code=status.HTTP_202_ACCEPTED)
+async def actualizar_amigo(id: int, amigo_actualizado: schemas.Amigos_Post, db: Session = Depends(main.get_db)):
+     try:
+         result = crud.actualizar_Amigos(cliente_actualizado=amigo_actualizado, db=db, id_cliente=id)
+         return {"id": result.id, "status": "ok"}
+     except:
+         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Amigo no actualizado")
+
+@router.delete("/amigo/{id}", status_code=status.HTTP_200_OK )
+async def borrar_amigo(id: int, db: Session = Depends(main.get_db)):
+    try:
+        result = crud.borrar_Amigos(db = db, id_cliente = id)
+        return {"id": str(result), "status": "ok", "operacion": "delete_amigo"}
+    except:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Amigo no borrado")

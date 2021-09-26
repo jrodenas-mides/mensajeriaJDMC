@@ -3,7 +3,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
 #String de Conexión
-SQLALCHEMY_DATABASE_URL = "postgresql://con_app_mensajeria:mensajeria@127.0.0.1/mensajeria"
+SQLALCHEMY_DATABASE_URL = "postgresql://con_app_mensajeria:mensajeria@127.0.0.1/db_Mensajeria"
 
 engine = create_engine(SQLALCHEMY_DATABASE_URL)
 
