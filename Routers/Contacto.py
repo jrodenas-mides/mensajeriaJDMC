@@ -28,11 +28,11 @@ def get_Contactos_All(offset: int = 0, limite: int = 100, db: Session = Depends(
 
 @router.post("/contacto", status_code=status.HTTP_201_CREATED, tags=["Contacto"])
 async def crear_Contacto(nuevo_contacto: schemas.contactos_Post, db: Session = Depends(main.get_db)):
-    #try:
+    try:
         result = crud.crear_Contacto(nuevo_contacto=nuevo_contacto, db=db)
         return {"id": result.id, "status": "ok"}
-    #except:
-        #raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="contacto no agregado")
+    except:
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="contacto no agregado")
 
 @router.put("/contacto/{id}", status_code=status.HTTP_202_ACCEPTED, tags=["Contacto"])
 async def actualizar_Contactos(id: int, contacto_actualizado: schemas.contactos_Post, db: Session = Depends(main.get_db)):
