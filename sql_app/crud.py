@@ -5,12 +5,18 @@ from . import models, schemas
 from sqlalchemy.exc import SQLAlchemyError
 
 
-def get_Amigos(db: Session, offset: int = 0, limite: int = 100):
+def get_Amigos_All(db: Session, offset: int = 0, limite: int = 100):
     return db.\
         query(models.Amigos).\
         offset(offset).\
         limit(limite).\
         all()
+
+def get_Amigos(db: Session, Amigos_id: int):
+    return db.\
+        query(models.Amigos).\
+        filter(models.Amigos.Id == Amigos_id).\
+        first()
 
 def crear_Amigos(db: Session, nuevo_Amigo: schemas.Amigos_Post):
     try:
@@ -29,7 +35,7 @@ def crear_Amigos(db: Session, nuevo_Amigo: schemas.Amigos_Post):
 
 
 def actualizar_Amigos(db: Session, Amigos_actualizado: schemas.Cliente_Post, id: int):
-    viejo_Amigos = db.query(models.Amigos).filter(models.Amigos.id == id)
+    viejo_Amigos = db.query(models.Amigos).filter(models.Amigos.Id == id)
 
     if not viejo_Amigos.first():
         raise SQLAlchemyError(message="Error encontrando el registro para actualizar")
@@ -42,7 +48,7 @@ def actualizar_Amigos(db: Session, Amigos_actualizado: schemas.Cliente_Post, id:
 
 
 def borrar_Amigos(db: Session, id_Amigo: int):
-    Amigo = db.query(models.Amigos).filter(models.Amigos.id == id_Amigo)
+    Amigo = db.query(models.Amigos).filter(models.Amigos.Id == id_Amigo)
 
     if not Amigo.first():
         raise SQLAlchemyError(message= "Error encontrando el registro para borrar")
