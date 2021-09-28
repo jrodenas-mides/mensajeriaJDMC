@@ -13,8 +13,8 @@ async def getIsAlive():
 @router.get("/contacto/{id_contacto}", response_model = List[schemas.contactos_Get], status_code=status.HTTP_200_OK , tags=["Contacto"])
 def get_Contacto(id_contacto:int, db: Session = Depends(main.get_db)):
     try:
-        contacto = crud.get_Contacto(db, id_contacto)
-        return contacto
+        contacto1 = crud.get_Contacto(db, id_contacto)
+        return contacto1
     except:
        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Contacto no encontrados")
 

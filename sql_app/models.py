@@ -30,7 +30,7 @@ class Amigos(Base):
     id = Column(Integer, primary_key=True, index=True)
     id_contacto1 = Column(Integer, ForeignKey("contactos.id"), unique=False, index=True, nullable=False)
     id_contacto2 = Column(Integer, unique=False, index=True, nullable=False)
-    id_Estatus = Column(Integer,  ForeignKey("estatus.id") ,nullable=False)
+    id_estatus = Column(Integer,  ForeignKey("estatus.id") ,nullable=False)
     fecha_asociacion  = Column(Date, nullable=False)
     llave_cifrada  = Column(String, nullable=True)
 
