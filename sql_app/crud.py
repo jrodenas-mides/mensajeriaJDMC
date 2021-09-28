@@ -18,16 +18,16 @@ def get_Amigos_All(db: Session, offset: int = 0, limite: int = 100):
 def get_Amigos(db: Session, Amigos_id: int):
     return db.\
         query(models.Amigos).\
-        filter(models.Amigos.Id == Amigos_id).\
+        filter(models.Amigos.id == Amigos_id).\
         all()
 
-def crear_Amigos(db: Session, nuevo_Amigo: schemas.Amigos_Post):
+def crear_Amigos(db: Session, nuevo_amigo: schemas.Amigos_Post):
     try:
-        db_Amigos = models.Amigos(Id_Contacto1=nuevo_Amigo.id_contacto1,
-                                    Id_Contacto2=nuevo_Amigo.id_contacto2,
-                                    Id_Estatus=nuevo_Amigo.id_estatus,
-                                    Fecha_Asociacion=nuevo_Amigo.fecha_asociacion,
-                                    Llave_Cifrada=nuevo_Amigo.llave_cifrada)
+        db_Amigos = models.Amigos(id_contacto1=nuevo_amigo.id_contacto1,
+                                    id_contacto2=nuevo_amigo.id_contacto2,
+                                    id_estatus=nuevo_amigo.id_estatus,
+                                    fecha_asociacion=nuevo_amigo.fecha_asociacion,
+                                    llave_cifrada=nuevo_amigo.llave_cifrada)
         db.add(db_Amigos)
         db.commit()
         db.refresh(db_Amigos)
@@ -37,21 +37,21 @@ def crear_Amigos(db: Session, nuevo_Amigo: schemas.Amigos_Post):
         raise Exception(message="Error creando el registro")
 
 
-def actualizar_Amigos(db: Session, Amigos_actualizado: schemas.Amigos_Post, id: int):
-    viejo_Amigos = db.query(models.Amigos).filter(models.Amigos.Id == id)
+def actualizar_Amigos(db: Session, amigo_actualizado: schemas.Amigos_Post, id: int):
+    viejo_Amigos = db.query(models.Amigos).filter(models.Amigos.id == id)
 
     if not viejo_Amigos.first():
         raise SQLAlchemyError(message="Error encontrando el registro para actualizar")
 
-    print(Amigos_actualizado.dict())
-    viejo_Amigos.update(Amigos_actualizado.dict())
+    print(amigo_actualizado.dict())
+    viejo_Amigos.update(amigo_actualizado.dict())
     db.commit()
 
     return viejo_Amigos.first()
 
 
-def borrar_Amigos(db: Session, id_Amigo: int):
-    Amigo = db.query(models.Amigos).filter(models.Amigos.Id == id_Amigo)
+def borrar_Amigos(db: Session, id_amigo: int):
+    Amigo = db.query(models.Amigos).filter(models.Amigos.id == id_amigo)
 
     if not Amigo.first():
         raise SQLAlchemyError(message= "Error encontrando el registro para borrar")
@@ -59,7 +59,7 @@ def borrar_Amigos(db: Session, id_Amigo: int):
     Amigo.delete(synchronize_session=False)
     db.commit()
 
-    return id_Amigo
+    return id_amigo
 
 #==============================================================================================
 #CONTACTOS
