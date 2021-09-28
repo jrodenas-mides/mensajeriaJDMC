@@ -1,11 +1,12 @@
 from fastapi import FastAPI
 from Versiones.v1 import app_v1
-
+from Versiones.version_auth import app_auth
 
 #Proyecto Final
 app = FastAPI()
 
 app.mount("/v1", app_v1)
+app.mount("/auth", app_auth)
 
 @app.get("/version")
 async def version():
