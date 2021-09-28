@@ -4,7 +4,8 @@ from sql_app import schemas,main,crud
 from sql_app.database import SessionLocal, engine
 from sqlalchemy.orm import Session
 
-router = APIRouter(prefix="/auth")
+
+router = APIRouter()
 
 @router.get("/isalive", tags=["Contacto"])
 async def getIsAlive():
