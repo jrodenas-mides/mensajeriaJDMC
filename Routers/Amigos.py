@@ -29,7 +29,7 @@ def get_amigosAll(offset: int = 0, limite: int = 100, db: Session = Depends(main
 @router.post("/amigo", status_code=status.HTTP_201_CREATED, tags=["Amigos"])
 async def crear_amigos(nuevo_amigo: schemas.Amigos_Post, db: Session = Depends(main.get_db)):
     try:
-        result = crud.crear_Amigos(nuevo_cliente=nuevo_amigo, db=db)
+        result = crud.crear_Amigos(nuevo_amigo=nuevo_amigo, db=db)
         return {"id": result.id, "status": "ok"}
     except:
         raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Amigo no agregado")
@@ -37,7 +37,7 @@ async def crear_amigos(nuevo_amigo: schemas.Amigos_Post, db: Session = Depends(m
 @router.put("/amigo/{id}", status_code=status.HTTP_202_ACCEPTED, tags=["Amigos"])
 async def actualizar_amigo(id: int, amigo_actualizado: schemas.Amigos_Post, db: Session = Depends(main.get_db)):
      try:
-         result = crud.actualizar_Amigos(cliente_actualizado=amigo_actualizado, db=db, id_cliente=id)
+         result = crud.actualizar_Amigos(amigo_actualizado=amigo_actualizado, db=db, id_amigo=id)
          return {"id": result.id, "status": "ok"}
      except:
          raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Amigo no actualizado")
@@ -45,7 +45,7 @@ async def actualizar_amigo(id: int, amigo_actualizado: schemas.Amigos_Post, db: 
 @router.delete("/amigo/{id}", status_code=status.HTTP_200_OK , tags=["Amigos"])
 async def borrar_amigo(id: int, db: Session = Depends(main.get_db)):
     try:
-        result = crud.borrar_Amigos(db = db, id_cliente = id)
+        result = crud.borrar_Amigos(db = db, id_amigo = id)
         return {"id": str(result), "status": "ok", "operacion": "delete_amigo"}
     except:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Amigo no borrado")
