@@ -20,15 +20,11 @@ async def is_alive(is_authorized: bool = Depends(check_jwt_token)):
     return {"alive": "yes", "is_authorized": is_authorized}
 
 
-@app_auth.get("/isalive2")
-async def is_alive():
-    is_authorized: bool = Depends(check_jwt_token)
-    return { is_authorized }
 # ======================================================================================================================
 
 @app_auth.post("/token")
 async def login_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(sqlORM.get_db)):
-    dict_form_data = {"id": 1, "usuario": form_data.username, "jwtoken": form_data.password, "nombres": "asd", "apellidos":"asd","correoelectronico":"asd","telefono":"asd","genero":"asd","fechanacimiento":"2021-09-27","intentosfallidos":"0","fechabloqueo":"2021-09-27 23:06","idrol":"1"}
+    dict_form_data = {"id": 1, "usuario": form_data.username, "jwtoken": form_data.password ,"nombres": "asd", "apellidos":"asd","correoelectronico":"asd","telefono":"asd","genero":"asd","fechanacimiento":"2021-09-27","intentosfallidos":"0","fechabloqueo":"2021-09-27 23:06","idrol":"1"}
     jwt_user = contactos_Get(**dict_form_data)
     user = authenticate_user(jwt_user, db=db)
 
