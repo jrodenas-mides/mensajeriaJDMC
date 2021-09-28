@@ -61,7 +61,7 @@ def create_jwt_token(user: schemas.contactos_Get):
 # 3. Chequear si el JWT es correcto:
 
 def check_jwt_token(token: str = Depends(oauth_schema), db: Session = Depends(sqlORM.get_db)):
-    try:
+    #try:
         payload = jwt.decode(jwt=token, key=JWT_SECRET_KEY, algorithms=JWT_ALGORITHM)
         username = payload.get("usr")
         rol = payload.get("rol")
@@ -69,12 +69,13 @@ def check_jwt_token(token: str = Depends(oauth_schema), db: Session = Depends(sq
 
         if time.time() < exp:
             if user_exist_in_db(username, db=db):
+                print(rol)
                 return validar_rol(rol)
 
-    except Exception as exc:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token invalido")
+    #except Exception as exc:
+        #raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token invalido")
 
-    raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token no pasa las validaciones")
+    #raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token no pasa las validaciones")
 
 # ======================================================================================================================
 
@@ -85,3 +86,23 @@ def validar_rol(rol: str):
         return True
     else:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Rol Invalido")
+
+def get_hashed_password(plain_password: str):
+    return pwd_context.hash(plain_password)
+
+
+def verify_password(plain_password: str, hashed_password: str):
+    try:
+        return pwd_context.verify(plain_password, hashed_password)
+    except:
+        return False
+
+
+def user_exist_in_db(username: str, db: Session = Depends(sqlORM.get_db)):
+    # try:
+    user = db.query(models.Contactos).filter(models.Contactos.usuario == username)
+
+    if not user.first():
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Error buscando el usuario")
+
+    return True
