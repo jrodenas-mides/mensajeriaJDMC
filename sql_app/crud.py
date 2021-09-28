@@ -127,50 +127,51 @@ def borrar_Contactos(db: Session, id_contacto: int):
 #============================================================================================================
 #MENSAJES
 
-def get_Mensajes_All(db: Session, offset: int = 0, limite: int = 100):
+
+def get_Mensajeria_All(db: Session, offset: int = 0, limite: int = 100):
     return db.\
         query(models.Mensajes).\
         offset(offset).\
         limit(limite).\
         all()
 
-def get_Mensajes(db: Session, Mensaje_id: int):
+def get_Mensajes(db: Session, Mensajes_id: int):
     return db.\
         query(models.Mensajes).\
-        filter(models.Mensajes.Id == Mensaje_id).\
+        filter(models.Mensajes.id == Mensajes_id).\
         all()
 
-def crear_Mensaje(db: Session, nuevo_Mensaje: schemas.mensajes_Post):
+def crear_Mensajes(db: Session, nuevo_mensaje: schemas.mensajes_Post):
     try:
-        db_Mensaje = models.Mensajes(Id_Emisor=nuevo_Mensaje.Id_Emisor,
-                                    Id_Receptor=nuevo_Mensaje.Id_Receptor,
-                                    Fecha_Envio=nuevo_Mensaje.Fecha_Envio,
-                                    Id_Estatus=nuevo_Mensaje.Id_Estatus,
-                                    Mensaje=nuevo_Mensaje.Mensaje)
-        db.add(db_Mensaje)
+        db_Mensajes = models.Mensajes(id_emisor=nuevo_mensaje.id_emisor,
+                                    id_receptor=nuevo_mensaje.id_receptor,
+                                    fecha_envio=nuevo_mensaje.fecha_envio,
+                                    id_estatus=nuevo_mensaje.id_estatus,
+                                    mensaje=nuevo_mensaje.mensaje)
+        db.add(db_Mensajes)
         db.commit()
-        db.refresh(db_Mensaje)
-        return db_Mensaje
+        db.refresh(db_Mensajes)
+        return db_Mensajes
     except SQLAlchemyError as exc:
         db.rollback()
         raise Exception(message="Error creando el registro")
 
 
-def actualizar_Mensajes(db: Session, Mensaje_actualizado: schemas.mensajes_Post, id: int):
-    viejo_Mensaje = db.query(models.Mensajes).filter(models.Mensajes.Id == id)
+def actualizar_Mensajes(db: Session, mensaje_actualizado: schemas.mensajes_Post, id: int):
+    viejo_Mensaje = db.query(models.Mensajes).filter(models.Mensajes.id == id)
 
     if not viejo_Mensaje.first():
         raise SQLAlchemyError(message="Error encontrando el registro para actualizar")
 
-    print(Mensaje_actualizado.dict())
-    viejo_Mensaje.update(Mensaje_actualizado.dict())
+    print(mensaje_actualizado.dict())
+    viejo_Mensaje.update(mensaje_actualizado.dict())
     db.commit()
 
     return viejo_Mensaje.first()
 
 
-def borrar_Mensajes(db: Session, id_Mensaje: int):
-    Mensaje = db.query(models.Mensajes).filter(models.Mensajes.Id == id_Mensaje)
+def borrar_Mensaje(db: Session, id_mensaje: int):
+    Mensaje = db.query(models.Mensajes).filter(models.Mensajes.id == id_mensaje)
 
     if not Mensaje.first():
         raise SQLAlchemyError(message= "Error encontrando el registro para borrar")
@@ -178,6 +179,4 @@ def borrar_Mensajes(db: Session, id_Mensaje: int):
     Mensaje.delete(synchronize_session=False)
     db.commit()
 
-    return id_Mensaje
-
-
+    return id_mensaje

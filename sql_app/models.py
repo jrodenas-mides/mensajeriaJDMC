@@ -42,8 +42,8 @@ class Amigos(Base):
 class Mensajes(Base):
     __tablename__ = "mensajes"
     id = Column(Integer, primary_key = True, index=True)
-    id_Emisor  = Column(Integer,  ForeignKey("contactos.id") , index = True)
-    id_Receptor  = Column(String , index = True)
+    id_emisor  = Column(Integer,  ForeignKey("contactos.id") , index = True)
+    id_receptor  = Column(String , index = True)
     fecha_envio  = Column(Date, nullable=False)
     id_estatus  = Column(Integer,  ForeignKey("estatus.id") ,unique=True, index=True)
     mensaje = Column(String)
