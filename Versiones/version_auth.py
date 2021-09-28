@@ -33,7 +33,6 @@ async def login_access_token(form_data: OAuth2PasswordRequestForm = Depends(), d
 
 
     if user is None:
-
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Usuario no autenticable")
 
     jwt_token = create_jwt_token(user)
