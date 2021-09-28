@@ -4,7 +4,8 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 import sql_app.models as models
-from Routers.autenticados import JwAmigos
+from Routers.autenticados import JwAmigos, JwContacto
+from Routers import Contacto, Amigos, Mensaje
 from authentication.auth2 import authenticate_user, create_jwt_token, get_hashed_password, check_jwt_token
 from sql_app.schemas import contactos_Get, contactos_Post
 from sql_app import main as sqlORM
@@ -12,7 +13,9 @@ from sql_app import main as sqlORM
 app_auth = FastAPI(root_path="/auth")
 
 # incluimos las rutas con autenticación y autorizacion
-app_auth.include_router(JwAmigos.router)
+app_auth.include_router(Amigos.router)
+app_auth.include_router(Mensaje.router)
+app_auth.include_router(Contacto.router)
 
 
 @app_auth.get("/isalive")

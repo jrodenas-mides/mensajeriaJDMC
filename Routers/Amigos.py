@@ -3,8 +3,11 @@ from fastapi import APIRouter,status, HTTPException,Depends
 from sql_app import schemas,main,crud
 from sql_app.database import SessionLocal, engine
 from sqlalchemy.orm import Session
+from authentication.auth2 import check_jwt_token
 
 router = APIRouter()
+
+router = APIRouter(prefix="/auth", dependencies=[Depends(check_jwt_token)])
 
 @router.get("/isalive", tags=["Amigos"])
 async def getIsAlive():
