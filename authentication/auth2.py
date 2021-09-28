@@ -87,6 +87,16 @@ def validar_rol(rol: str):
     else:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Rol Invalido")
 
+
+def user_exist_in_db(username: str, db: Session = Depends(sqlORM.get_db)):
+    # try:
+    user = db.query(models.Contactos).filter(models.Contactos.usuario == username)
+
+    if not user.first():
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Error buscando el usuario")
+
+    return True
+
 def get_hashed_password(plain_password: str):
     return pwd_context.hash(plain_password)
 

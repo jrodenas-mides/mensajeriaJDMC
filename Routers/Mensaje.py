@@ -6,7 +6,7 @@ from sqlalchemy.orm import Session
 from authentication.auth2 import check_jwt_token
 
 router = APIRouter()
-router = APIRouter(prefix="/auth", dependencies=[Depends(check_jwt_token)])
+router = APIRouter(prefix="/MENSAJE", dependencies=[Depends(check_jwt_token)])
 
 @router.get("/isalive", tags=["Mensaje"])
 async def getIsAlive():

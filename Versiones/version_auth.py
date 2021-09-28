@@ -4,7 +4,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 
 import sql_app.models as models
-from Routers.autenticados import JwAmigos, JwContacto
+
 from Routers import Contacto, Amigos, Mensaje
 from authentication.auth2 import authenticate_user, create_jwt_token, get_hashed_password, check_jwt_token
 from sql_app.schemas import contactos_Get, contactos_Post
@@ -31,7 +31,9 @@ async def login_access_token(form_data: OAuth2PasswordRequestForm = Depends(), d
     jwt_user = contactos_Get(**dict_form_data)
     user = authenticate_user(jwt_user, db=db)
 
+
     if user is None:
+
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Usuario no autenticable")
 
     jwt_token = create_jwt_token(user)

@@ -7,7 +7,7 @@ from authentication.auth2 import check_jwt_token
 
 router = APIRouter()
 
-router = APIRouter(prefix="/auth", dependencies=[Depends(check_jwt_token)])
+router = APIRouter(prefix="/AMIGOS", dependencies=[Depends(check_jwt_token)])
 
 @router.get("/isalive", tags=["Amigos"])
 async def getIsAlive():
